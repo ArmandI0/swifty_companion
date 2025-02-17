@@ -49,7 +49,7 @@ class AppTheme {
         fontFamily: 'RobotoMono',
       ),
       bodyLarge: TextStyle(
-        color: AppColors.textPrimary,
+        color: const Color.fromARGB(255, 0, 0, 0),
         fontSize: 16,
         letterSpacing: 0.15,
         fontFamily: 'RobotoMono',

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 export 'AppBar.dart';
 import '../tools/Requests.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../Models/User.dart';
 
 class MyAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
-  final Function(List<dynamic>) profileResult;
+  final Function(User) profileResult;
 
   const MyAppBar({super.key, required this.title, required this.profileResult});
 
@@ -25,8 +25,8 @@ class _MyAppBarState extends State<MyAppBar> {
     final tokenManage = TokenManager();
     String? token = await tokenManage.getToken();
     String? nickname = _searchController.text;
-    print(nickname);
-    final url = "https://api.intra.42.fr/v2/users?filter[login]=$nickname";
+    final url =
+        "https://api.intra.42.fr/v2/users/$nickname"; // Changed URL to get single user
 
     final response = await http.get(
       Uri.parse(url),
@@ -36,16 +36,22 @@ class _MyAppBarState extends State<MyAppBar> {
       },
     );
     if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      print(data);
-      widget.profileResult(data);
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      try {
+        final decodedData = User.fromJson(data);
+        widget.profileResult(decodedData);
+      } catch (e) {
+        print("Error decoding user data: $e");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: Invalid user data format')),
+        );
+      }
     } else {
       print("ERROR: ${response.statusCode}");
-      return null;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('User not found')));
     }
-
-    final String? Secret = dotenv.env['SECRET'];
-    print(Secret);
   }
 
   @override

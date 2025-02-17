@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import '../components/AppBar.dart';
+import '../Models/User.dart';
 
 class SetScaffold extends StatefulWidget {
   final String title;
-  final Map<String, dynamic>? profile;
+  final User? profile;
 
   const SetScaffold({super.key, required this.title, this.profile});
 
@@ -12,24 +13,24 @@ class SetScaffold extends StatefulWidget {
 }
 
 class _SetScaffoldState extends State<SetScaffold> {
-  Map<String, dynamic>? userData;
+  User? userData;
 
   @override
   void initState() {
     super.initState();
-    if (widget.profile != null) ({
-      userData = widget.profile
-    });
+    if (widget.profile != null) {
+      userData = widget.profile;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(
-        title: 'Coucou',
+        title: 'Swifty Companion',
         profileResult: (data) {
           setState(() {
-            userData = data[0]; // On prend le premier utilisateur
+            userData = data;
           });
         },
       ),
@@ -40,21 +41,24 @@ class _SetScaffoldState extends State<SetScaffold> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Photo de profil
                     Center(
                       child: CircleAvatar(
                         radius: 50,
-                        backgroundImage: NetworkImage(
-                          userData!['image']['versions']['medium'],
-                        ),
+                        backgroundImage:
+                            userData!.image?.versions.medium != null
+                                ? NetworkImage(userData!.image!.versions.medium)
+                                : null,
+                        child:
+                            userData!.image == null
+                                ? Text(userData!.login[0].toUpperCase())
+                                : null,
                       ),
                     ),
                     SizedBox(height: 20),
 
-                    // Informations de l'utilisateur
                     Text(
-                      userData!['usual_full_name'] ??
-                          '${userData!['first_name']} ${userData!['last_name']}',
+                      userData!.usual_full_name ??
+                          "${userData!.first_name} ${userData!.last_name}",
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -62,11 +66,24 @@ class _SetScaffoldState extends State<SetScaffold> {
                     ),
                     SizedBox(height: 10),
 
-                    InfoRow(label: 'Login:', value: userData!['login']),
-                    InfoRow(label: 'Email:', value: userData!['email']),
-                    InfoRow(label: 'Type:', value: userData!['kind']),
-
-                    // Ajoutez d'autres informations selon vos besoins
+                    InfoRow(label: 'Login:', value: userData!.login),
+                    InfoRow(label: 'Email:', value: userData!.email),
+                    if (userData!.kind != null)
+                      InfoRow(label: 'Type:', value: userData!.kind!),
+                    InfoRow(
+                      label: 'Location:',
+                      value: userData!.location ?? 'Unavailable',
+                    ),
+                    if (userData!.wallet != null)
+                      InfoRow(
+                        label: 'Wallet:',
+                        value: userData!.wallet.toString(),
+                      ),
+                    if (userData!.correction_point != null)
+                      InfoRow(
+                        label: 'Correction Points:',
+                        value: userData!.correction_point.toString(),
+                      ),
                   ],
                 ),
               )
@@ -75,7 +92,6 @@ class _SetScaffoldState extends State<SetScaffold> {
   }
 }
 
-// Widget réutilisable pour afficher une ligne d'information
 class InfoRow extends StatelessWidget {
   final String label;
   final String value;
@@ -87,15 +103,25 @@ class InfoRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        children: [
-          Text(
-            label,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          ),
-          SizedBox(width: 8),
-          Text(value, style: TextStyle(fontSize: 16)),
-        ],
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              label,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+            SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                value,
+                style: TextStyle(fontSize: 16),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'ProfileInformations.dart';
 import '../tools/Requests.user.dart';
+import '../Models/User.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,7 +15,19 @@ class _HomePageState extends State<HomePage> {
   final _searchController = TextEditingController();
 
   void navigateToProfile() async {
-    List<dynamic>? json = await SearchOnApi42(_searchController.text);
+    User? user = await SearchOnApi42(_searchController.text);
+    if (user != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SetScaffold(title: 'Profile', profile: user),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('User not found')));
+    }
   }
 
   @override
