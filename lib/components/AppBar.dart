@@ -9,11 +9,7 @@ class MyAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
   final Function(List<dynamic>) profileResult;
 
-  const MyAppBar({
-    super.key,
-    required this.title,
-    required this.profileResult,
-    });
+  const MyAppBar({super.key, required this.title, required this.profileResult});
 
   @override
   State<MyAppBar> createState() => _MyAppBarState();
@@ -41,6 +37,7 @@ class _MyAppBarState extends State<MyAppBar> {
     );
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
+      print(data);
       widget.profileResult(data);
     } else {
       print("ERROR: ${response.statusCode}");
