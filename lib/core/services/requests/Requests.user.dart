@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'Requests.dart';
+import 'TokenManager.dart';
 import 'package:http/http.dart' as http;
-import '../Models/User.dart';
+import '../../models/User.dart';
 
 Future<User?> SearchOnApi42(String nickname) async {
   final tokenManage = TokenManager();
@@ -18,6 +18,8 @@ Future<User?> SearchOnApi42(String nickname) async {
   if (response.statusCode == 200) {
     final Map<String, dynamic> data = jsonDecode(response.body);
     try {
+      print(data);
+
       return User.fromJson(data);
     } catch (e) {
       print("Error decoding user data: $e");

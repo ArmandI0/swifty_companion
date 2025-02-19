@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'ProfileInformations.dart';
-import '../tools/Requests.user.dart';
-import '../Models/User.dart';
+import '../profilpage/ProfileInformations.dart';
+import '../../core/services/requests/Requests.user.dart';
+import '../../core/models/User.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,20 +13,41 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _searchController = TextEditingController();
+  bool _disableButton = false;
 
   void navigateToProfile() async {
+    setState(() {
+      _disableButton = true;
+    });
+    _disableButton = true;
     User? user = await SearchOnApi42(_searchController.text);
     if (user != null) {
+      setState(() {
+        _disableButton = false;
+      });
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => SetScaffold(title: 'Profile', profile: user),
+          builder: (context) => SetScaffold(profile: user),
         ),
       );
     } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('User not found')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(
+            SnackBar(
+              duration: Duration(milliseconds: 1500), // Durée personnalisée
+              backgroundColor: Colors.red[900],
+              content: Text(
+                'User not found',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          )
+          .closed.then((reason) {
+            setState(() {
+              _disableButton = false;
+            });
+          });
     }
   }
 
@@ -75,7 +96,8 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: ElevatedButton(
-                  onPressed: () => {navigateToProfile()},
+                  onPressed:
+                      _disableButton ? null : () => {navigateToProfile()},
                   child: Text('Lancer la recherche'),
                 ),
               ),

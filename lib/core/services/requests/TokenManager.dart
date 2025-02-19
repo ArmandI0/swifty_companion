@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-export 'Requests.dart';
+export 'TokenManager.dart';
 
 class TokenManager{
   static final TokenManager _instance = TokenManager._internal();

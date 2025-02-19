@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:swifty_companion/themes.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'views/HomePage.dart';
+import 'modules/homepage/HomePage.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: ".env");
