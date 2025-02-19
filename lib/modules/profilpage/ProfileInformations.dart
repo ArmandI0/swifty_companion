@@ -29,12 +29,12 @@ class SetScaffold extends StatelessWidget {
                 child: CircleAvatar(
                   radius: 50,
                   backgroundImage:
-                      profile!.image?.versions.medium != null
-                          ? NetworkImage(profile!.image!.versions.medium)
+                      profile!.image?.versions!.medium != null
+                          ? NetworkImage(profile!.image!.versions!.medium!)
                           : null,
                   child:
                       profile!.image == null
-                          ? Text(profile!.login[0].toUpperCase())
+                          ? Text(profile!.login![0].toUpperCase())
                           : null,
                 ),
               ),

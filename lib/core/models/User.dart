@@ -67,10 +67,10 @@ class User {
 
 @JsonSerializable()
 class UserImage {
-  final String link;
-  final ImageVersions versions;
+  final String? link; // Rendu optionnel
+  final ImageVersions? versions; // Rendu optionnel
 
-  UserImage({required this.link, required this.versions});
+  UserImage({this.link, this.versions}); // Suppression des required
 
   factory UserImage.fromJson(Map<String, dynamic> json) =>
       _$UserImageFromJson(json);
@@ -79,17 +79,17 @@ class UserImage {
 
 @JsonSerializable()
 class ImageVersions {
-  final String large;
-  final String medium;
-  final String small;
-  final String micro;
+  final String? large; // Rendu optionnel
+  final String? medium; // Rendu optionnel
+  final String? small; // Rendu optionnel
+  final String? micro; // Rendu optionnel
 
   ImageVersions({
-    required this.large,
-    required this.medium,
-    required this.small,
-    required this.micro,
-  });
+    this.large,
+    this.medium,
+    this.small,
+    this.micro,
+  }); // Suppression des required
 
   factory ImageVersions.fromJson(Map<String, dynamic> json) =>
       _$ImageVersionsFromJson(json);

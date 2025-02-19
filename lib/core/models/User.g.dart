@@ -66,8 +66,11 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
 };
 
 UserImage _$UserImageFromJson(Map<String, dynamic> json) => UserImage(
-  link: json['link'] as String,
-  versions: ImageVersions.fromJson(json['versions'] as Map<String, dynamic>),
+  link: json['link'] as String?,
+  versions:
+      json['versions'] == null
+          ? null
+          : ImageVersions.fromJson(json['versions'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$UserImageToJson(UserImage instance) => <String, dynamic>{
@@ -77,10 +80,10 @@ Map<String, dynamic> _$UserImageToJson(UserImage instance) => <String, dynamic>{
 
 ImageVersions _$ImageVersionsFromJson(Map<String, dynamic> json) =>
     ImageVersions(
-      large: json['large'] as String,
-      medium: json['medium'] as String,
-      small: json['small'] as String,
-      micro: json['micro'] as String,
+      large: json['large'] as String?,
+      medium: json['medium'] as String?,
+      small: json['small'] as String?,
+      micro: json['micro'] as String?,
     );
 
 Map<String, dynamic> _$ImageVersionsToJson(ImageVersions instance) =>

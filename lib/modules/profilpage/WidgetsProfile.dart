@@ -20,8 +20,8 @@ class ProfileUI {
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 10),
-          InfoRow(label: 'Login:', value: profile!.login),
-          InfoRow(label: 'Email:', value: profile!.email),
+          InfoRow(label: 'Login:', value: profile!.login!),
+          InfoRow(label: 'Email:', value: profile!.email!),
           if (profile!.phone != null)
             InfoRow(label: 'Phone :', value: profile!.phone!),
           if (profile!.kind != null)
