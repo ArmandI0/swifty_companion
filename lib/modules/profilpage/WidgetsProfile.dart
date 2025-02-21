@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../core/models/User.dart';
 import 'InfoRow.dart';
 
-
-
 class ProfileUI {
-  final User? profile;
+  final Map<String, dynamic>? profile;
 
   ProfileUI(this.profile);
 
@@ -14,29 +11,57 @@ class ProfileUI {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            profile!.usual_full_name ??
-                "${profile!.first_name} ${profile!.last_name}",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
           SizedBox(height: 10),
-          InfoRow(label: 'Login:', value: profile!.login!),
-          InfoRow(label: 'Email:', value: profile!.email!),
-          if (profile!.phone != null)
-            InfoRow(label: 'Phone :', value: profile!.phone!),
-          if (profile!.kind != null)
-            InfoRow(label: 'Type:', value: profile!.kind!),
-          InfoRow(
-            label: 'Location:',
-            value: profile!.location ?? 'Unavailable',
-          ),
-          if (profile!.wallet != null)
-            InfoRow(label: 'Wallet:', value: profile!.wallet.toString()),
-          if (profile!.correction_point != null)
+          InfoRow(label: 'Login:', value: profile!['login']),
+          InfoRow(label: 'Email:', value: profile!['email']),
+          if (profile!['phone'] != null)
+            InfoRow(label: 'Phone:', value: profile!['phone']),
+          if (profile!['wallet'] != null)
+            InfoRow(label: 'Wallet:', value: profile!['wallet'].toString()),
+          if (profile!['correction_point'] != null)
             InfoRow(
               label: 'Correction Points:',
-              value: profile!.correction_point.toString(),
+              value: profile!['correction_point'].toString(),
             ),
+        ],
+      ),
+    );
+  }
+
+  Widget Skills() {
+    if (profile!['skills'] == null) return Container();
+
+    return WhiteBoxContainer(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Skills',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 15),
+          ...((profile!['skills'] as List<dynamic>).map((skill) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${skill['name']} - Level ${skill['level'].toStringAsFixed(2)}',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  SizedBox(height: 5),
+                  LinearProgressIndicator(
+                    value: skill['level'] / 20, // Niveau max 20
+                    backgroundColor: Colors.grey[200],
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                    minHeight: 10,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ],
+              ),
+            );
+          }).toList()),
         ],
       ),
     );

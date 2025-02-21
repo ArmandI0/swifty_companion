@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../profilpage/ProfileInformations.dart';
 import '../../core/services/requests/Requests.user.dart';
-import '../../core/models/User.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,17 +18,16 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _disableButton = true;
     });
-    _disableButton = true;
-    User? user = await SearchOnApi42(_searchController.text);
-    if (user != null) {
+    Map<String, dynamic>? userData = await SearchOnApi42(
+      _searchController.text,
+    );
+    if (userData != null) {
       setState(() {
         _disableButton = false;
       });
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => SetScaffold(profile: user),
-        ),
+        MaterialPageRoute(builder: (context) => SetScaffold(profile: userData)),
       );
     } else {
       ScaffoldMessenger.of(context)
@@ -43,7 +41,8 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           )
-          .closed.then((reason) {
+          .closed
+          .then((reason) {
             setState(() {
               _disableButton = false;
             });

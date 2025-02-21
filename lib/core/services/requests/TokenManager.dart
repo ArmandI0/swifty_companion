@@ -3,10 +3,10 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 export 'TokenManager.dart';
 
-class TokenManager{
+class TokenManager {
   static final TokenManager _instance = TokenManager._internal();
 
-  factory TokenManager(){
+  factory TokenManager() {
     return _instance;
   }
 
@@ -20,9 +20,15 @@ class TokenManager{
   Future<String?> getToken() async {
     if (_token != null)
       return _token;
-    else
-      _token = await getAccessToken();
-      return _token;
+    else {
+      try {
+        _token = await getAccessToken();
+        return _token;
+      } catch (e) {
+        print(e);
+        return null;
+      }
+    }
   }
 
   Future<String?> getAccessToken() async {
@@ -45,7 +51,3 @@ class TokenManager{
     }
   }
 }
-
-
-
-

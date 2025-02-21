@@ -1,46 +1,51 @@
 import 'package:flutter/material.dart';
 import '../../components/AppBar.dart';
-import '../../core/models/User.dart';
 import 'WidgetsProfile.dart';
 
 class SetScaffold extends StatelessWidget {
-  final User? profile;
+  final Map<String, dynamic>? profile;
 
   const SetScaffold({super.key, this.profile});
 
   @override
   Widget build(BuildContext context) {
-    print(profile);
     return Scaffold(
       appBar: MyAppBar(),
       body: Container(
+        height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/bkgrnd.jpg'),
             fit: BoxFit.cover,
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: CircleAvatar(
-                  radius: 50,
-                  backgroundImage:
-                      profile!.image?.versions!.medium != null
-                          ? NetworkImage(profile!.image!.versions!.medium!)
-                          : null,
-                  child:
-                      profile!.image == null
-                          ? Text(profile!.login![0].toUpperCase())
-                          : null,
+        child: SingleChildScrollView(
+          // Ajout du ScrollView
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundImage:
+                        profile!['image'] != null
+                            ? NetworkImage(profile!['image']['medium'])
+                            : null,
+                    child:
+                        profile!['image'] == null
+                            ? Text(profile!['login'][0].toUpperCase())
+                            : null,
+                  ),
                 ),
-              ),
-              SizedBox(height: 20),
-              ProfileUI(profile).MainInfos(),
-            ],
+                SizedBox(height: 20),
+                ProfileUI(profile).MainInfos(),
+                SizedBox(height: 20),
+                profile!['skills'] != null ? ProfileUI(profile).Skills() : SizedBox(height: 20),
+
+              ],
+            ),
           ),
         ),
       ),
