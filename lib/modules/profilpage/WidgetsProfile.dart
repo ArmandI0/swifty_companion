@@ -29,8 +29,11 @@ class ProfileUI {
   }
 
   Widget Skills() {
-    if (profile!['skills'] == null) return Container();
-
+    if (profile == null || 
+        profile!['skills'] == null || 
+        (profile!['skills'] as List).isEmpty) {
+      return Container();
+    }
     return WhiteBoxContainer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,6 +44,7 @@ class ProfileUI {
           ),
           SizedBox(height: 15),
           ...((profile!['skills'] as List<dynamic>).map((skill) {
+            // Vérification des données skill
             return Padding(
               padding: const EdgeInsets.only(bottom: 10),
               child: Column(

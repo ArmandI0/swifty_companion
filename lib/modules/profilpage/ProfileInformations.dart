@@ -33,16 +33,12 @@ class SetScaffold extends StatelessWidget {
                         profile!['image'] != null
                             ? NetworkImage(profile!['image']['medium'])
                             : null,
-                    child:
-                        profile!['image'] == null
-                            ? Text(profile!['login'][0].toUpperCase())
-                            : null,
                   ),
                 ),
                 SizedBox(height: 20),
                 ProfileUI(profile).MainInfos(),
                 SizedBox(height: 20),
-                profile!['skills'] != null ? ProfileUI(profile).Skills() : SizedBox(height: 20),
+                ProfileUI(profile).Skills(),
 
               ],
             ),
